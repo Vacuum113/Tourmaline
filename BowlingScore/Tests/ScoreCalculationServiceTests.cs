@@ -61,6 +61,15 @@ namespace BowlingScore.Tests
         }
         
         [Test]
+        public void Calculation_Three_Strikes_Should_Returns_60_Points_In_Frame()
+        {
+            var throws = new [] {"X", "X", "X"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(60, _score.Total);
+        }
+        
+        [Test]
         public void Strike_Should_Close_Scoring_In_Frame()
         {
             var throws = new [] {"X", "2"};
@@ -98,15 +107,33 @@ namespace BowlingScore.Tests
         }
         
         [Test]
-        public void Points_For_Next_Two_Throws_After_Spare_Doubled()
+        public void Points_For_Next_One_Throws_After_Spare_Doubled()
         {
             var throws = new [] {"5", "/", "5", "2"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(17, _score.Frames[0].Total);
-            Assert.AreEqual(24, _score.Total);
+            Assert.AreEqual(15, _score.Frames[0].Total);
+            Assert.AreEqual(22, _score.Total);
         }
+        
+        [Test]
+        public void Calculation_Max_Possible_Result()
+        {
+            var throws = new [] {"X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X"};
+            CalculationManyThrows(throws);
 
+            Assert.AreEqual(300, _score.Total);
+        }
+        
+        [Test]
+        public void General_Test()
+        {
+            var throws = new [] {"X", "7", "/", "7", "2", "9", "/", "X", "X", "X", "2", "3", "6", "/", "7", "/", "3"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(168, _score.Total);
+        }
+        
         private void CalculationManyThrows(string[] throws)
         {
             foreach (var thr in throws)
