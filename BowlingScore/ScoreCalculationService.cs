@@ -9,8 +9,11 @@ namespace BowlingScore
         private bool _isFirstThrow;
 
         private const string Strike = "X";
-        private const string Spare = "/";
+        private const int PointsForStrike = 10;
         
+        private const string Spare = "/";
+        private const int PointsForSpare = 10;
+
         public ScoreCalculationService(Score score)
         {
             _score = score;
@@ -46,7 +49,7 @@ namespace BowlingScore
             switch (numberPins)
             {
                 case Strike:
-                    
+                    _currentFrame.FirstThrow = PointsForStrike;
                     break;
                 default:
                     CalculateCommonNumberPins(numberPins);
