@@ -31,7 +31,8 @@ namespace BowlingScore
             else
                 CalculateSecondThrow(numberPins);
 
-            _isFirstThrow = !_isFirstThrow;
+            if (_currentFrame.FirstThrow != PointsForStrike)
+                _isFirstThrow = !_isFirstThrow;
         }
 
         private void CalculateSecondThrow(string numberPins)
