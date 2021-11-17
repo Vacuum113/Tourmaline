@@ -60,6 +60,14 @@ namespace BowlingScore.Tests
             Assert.AreEqual(10, _score.Frames[0].Total);
         }
         
+        [Test]
+        public void Strike_Should_Close_Scoring_In_Frame()
+        {
+            var throws = new [] {"X", "2"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(2, _score.Frames.Count);
+        }
 
         private void CalculationManyThrows(string[] throws)
         {
