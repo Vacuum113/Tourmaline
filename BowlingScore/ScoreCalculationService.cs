@@ -17,10 +17,15 @@ namespace BowlingScore
         
         public void CalculateThrow(string s)
         {
-            if (CurrentFrame == null)
-                CurrentFrame = new Frame();
-            
-            Score.Frames.Add(CurrentFrame);
+            if (_isFirstThrow)
+                _score.Frames.Add(_currentFrame);
+
+            _isFirstThrow = !_isFirstThrow;
+        }
+
+        private enum ThrowResultType
+        {
+            Common
         }
     }
 }
