@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace BowlingScore
@@ -8,12 +8,14 @@ namespace BowlingScore
         private readonly Score _score;
         private Frame _currentFrame;
         private bool _isFirstThrow;
+        
         private bool IsLastFrame => _score.Frames.Count == 10;
         
         private const string Strike = "X";
+        private const string Spare = "/";
+
         private const int MaxPoints = 10;
         
-        private const string Spare = "/";
 
         public ScoreCalculationService(Score score)
         {
@@ -73,14 +75,14 @@ namespace BowlingScore
             if (isPreviousFrameHasStrike)
             {
                 if (_score.Frames[^1].Throws.Count != 3)
-                    _score.Frames[^2].AdditionalPoints += points;
+                    _score.Frames[^2].SetAdditionalPoints(points);
                 
                 if (_score.Frames.Count > 2 && _score.Frames[^3].Strike && _currentFrame.Throws.Count == 1)
-                    _score.Frames[^3].AdditionalPoints += points;
+                    _score.Frames[^3].SetAdditionalPoints(points);
             }
 
             if (isPreviousFrameHasSpare && _isFirstThrow && _score.Frames[^1].Throws.Count != 3)
-                _score.Frames[^2].AdditionalPoints += points;
+                _score.Frames[^2].SetAdditionalPoints(points);
         }
         
 
