@@ -41,6 +41,15 @@ namespace BowlingScore.Tests
 
             Assert.AreEqual(7, _score.Frames[0].Total);
         }
+        
+        [TestCase]
+        public void Calculation_Two_Throws_Returns_Sum_of_Pins_Knocked_Down_In_Frame()
+        {
+            var throws = new [] {"7", "2"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(9, _score.Frames[0].Total);
+        }
 
         private void CalculationManyThrows(string[] throws)
         {
