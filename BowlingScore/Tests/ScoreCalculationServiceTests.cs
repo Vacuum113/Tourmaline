@@ -16,7 +16,7 @@ namespace BowlingScore.Tests
 
             scoreCalculationService.CalculateThrow("9");
 
-            Assert.AreEqual(1, scoreCalculationService.Score.Frames.Length);
+            Assert.AreEqual(1, scoreCalculationService.Score.Frames.Count);
         }
     }
 }
