@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BowlingScore
 {
@@ -23,54 +24,58 @@ namespace BowlingScore
         public void CalculateThrow(string numberPins)
         {
             if (_isFirstThrow)
-            {
                 _score.Frames.Add(_currentFrame);
-                CalculateFirstThrow(numberPins);
-            }
-            else
-            {
-                CalculateSecondThrow(numberPins);
-                _currentFrame = new Frame();
-            }
-
-            if (_currentFrame.FirstThrow != MaxPoints)
-                _isFirstThrow = !_isFirstThrow;
-        }
-
-        private void CalculateSecondThrow(string numberPins)
-        {
-            if (numberPins == Spare)
-                _currentFrame.SecondThrow = MaxPoints - _currentFrame.FirstThrow;
-            else
-                CalculateCommonNumberPins(numberPins);
-        }
-
-        private void CalculateFirstThrow(string numberPins)
-        {
-            switch (numberPins)
-            {
-                case Strike:
-                    _currentFrame.FirstThrow = MaxPoints;
-                    break;
-                default:
-                    CalculateCommonNumberPins(numberPins);
-                    break;
-            }
-        }
-
-        private void CalculateCommonNumberPins(string numberPins)
-        {
-            var num = int.Parse(numberPins);
             
-            if (_isFirstThrow)
-                _currentFrame.FirstThrow = num;
-            else
-                _currentFrame.SecondThrow = num;
+            InternalCalculateThrow(numberPins);
+
+            UpdateStateAfterCalculation();
+
+            UpdateStateOnStrike();
         }
 
-        private enum ThrowResultType
+        private void UpdateStateOnStrike()
         {
-            Common
+            if (_currentFrame.Strike)
+            {
+                _currentFrame = new Frame();
+                _isFirstThrow = true;
+            }
+        }
+
+        private void UpdateStateAfterCalculation()
+        {
+            if (!_isFirstThrow)
+                _currentFrame = new Frame();
+
+            _isFirstThrow = !_isFirstThrow;
+        }
+
+        private void InternalCalculateThrow(string numberPins)
+        {
+            var points = numberPins switch
+            {
+                Strike => MaxPoints,
+                Spare => MaxPoints - _currentFrame.Throws.First(),
+                _ => CalculateCommonNumberPins(numberPins)
+            };
+            
+            _currentFrame.Throws.Add(points);
+            
+            RecalculatePreviousFrame(points);
+        }
+
+        private void RecalculatePreviousFrame(int points)
+        {
+            var isPreviousFrameHasStrikeOrSpare = _score.Frames.Count > 1 && (_score.Frames[^2].Strike || _score.Frames[^2].Spare);
+            
+            if (isPreviousFrameHasStrikeOrSpare)
+                _score.Frames[^2].AdditionalPoints += points;
+        }
+        
+
+        private int CalculateCommonNumberPins(string numberPins)
+        {
+            return int.Parse(numberPins);
         }
     }
 }
