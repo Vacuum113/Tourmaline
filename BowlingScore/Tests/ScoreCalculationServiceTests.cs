@@ -34,7 +34,7 @@ namespace BowlingScore.Tests
         }
 
         [TestCase]
-        public void Calculation_Seven_Points_Returns_Seven_Points_In_A_Frame()
+        public void Calculation_Seven_Points_Returns_Seven_Points_In_Frame()
         {
             var throws = new [] {"7"};
             CalculationManyThrows(throws);
