@@ -8,7 +8,8 @@ namespace BowlingScore
         private readonly Score _score;
         private Frame _currentFrame;
         private bool _isFirstThrow;
-
+        private bool IsLastFrame => _score.Frames.Count == 10;
+        
         private const string Strike = "X";
         private const int MaxPoints = 10;
         
@@ -23,7 +24,7 @@ namespace BowlingScore
         
         public void CalculateThrow(string numberPins)
         {
-            if (_isFirstThrow)
+            if (_isFirstThrow && !IsLastFrame)
                 _score.Frames.Add(_currentFrame);
             
             InternalCalculateThrow(numberPins);
@@ -35,7 +36,7 @@ namespace BowlingScore
 
         private void UpdateStateOnStrike()
         {
-            if (_currentFrame.Strike)
+            if (_currentFrame.Strike && !IsLastFrame)
             {
                 _currentFrame = new Frame();
                 _isFirstThrow = true;
@@ -44,7 +45,7 @@ namespace BowlingScore
 
         private void UpdateStateAfterCalculation()
         {
-            if (!_isFirstThrow)
+            if (!_isFirstThrow && !IsLastFrame)
                 _currentFrame = new Frame();
 
             _isFirstThrow = !_isFirstThrow;
@@ -58,7 +59,7 @@ namespace BowlingScore
                 Spare => MaxPoints - _currentFrame.Throws.First(),
                 _ => CalculateCommonNumberPins(numberPins)
             };
-            
+
             _currentFrame.Throws.Add(points);
             
             RecalculatePreviousFrame(points);
@@ -66,9 +67,19 @@ namespace BowlingScore
 
         private void RecalculatePreviousFrame(int points)
         {
-            var isPreviousFrameHasStrikeOrSpare = _score.Frames.Count > 1 && (_score.Frames[^2].Strike || _score.Frames[^2].Spare);
-            
-            if (isPreviousFrameHasStrikeOrSpare)
+            var isPreviousFrameHasStrike = _score.Frames.Count > 1 && _score.Frames[^2].Strike;
+            var isPreviousFrameHasSpare = _score.Frames.Count > 1 && _score.Frames[^2].Spare;
+
+            if (isPreviousFrameHasStrike)
+            {
+                if (_score.Frames[^1].Throws.Count != 3)
+                    _score.Frames[^2].AdditionalPoints += points;
+                
+                if (_score.Frames.Count > 2 && _score.Frames[^3].Strike && _currentFrame.Throws.Count == 1)
+                    _score.Frames[^3].AdditionalPoints += points;
+            }
+
+            if (isPreviousFrameHasSpare && _isFirstThrow && _score.Frames[^1].Throws.Count != 3)
                 _score.Frames[^2].AdditionalPoints += points;
         }
         
