@@ -50,6 +50,16 @@ namespace BowlingScore.Tests
 
             Assert.AreEqual(9, _score.Frames[0].Total);
         }
+        
+        [Test]
+        public void Calculation_Strike_Should_Returns_Ten_Points_In_Frame()
+        {
+            var throws = new [] {"X"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(10, _score.Frames[0].Total);
+        }
+        
 
         private void CalculationManyThrows(string[] throws)
         {
