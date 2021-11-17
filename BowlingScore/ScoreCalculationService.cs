@@ -9,10 +9,9 @@ namespace BowlingScore
         private bool _isFirstThrow;
 
         private const string Strike = "X";
-        private const int PointsForStrike = 10;
+        private const int MaxPoints = 10;
         
         private const string Spare = "/";
-        private const int PointsForSpare = 10;
 
         public ScoreCalculationService(Score score)
         {
@@ -31,16 +30,14 @@ namespace BowlingScore
             else
                 CalculateSecondThrow(numberPins);
 
-            if (_currentFrame.FirstThrow != PointsForStrike)
+            if (_currentFrame.FirstThrow != MaxPoints)
                 _isFirstThrow = !_isFirstThrow;
         }
 
         private void CalculateSecondThrow(string numberPins)
         {
             if (numberPins == Spare)
-            {
-                    
-            }
+                _currentFrame.SecondThrow = MaxPoints - _currentFrame.FirstThrow;
             else
                 CalculateCommonNumberPins(numberPins);
         }
@@ -50,7 +47,7 @@ namespace BowlingScore
             switch (numberPins)
             {
                 case Strike:
-                    _currentFrame.FirstThrow = PointsForStrike;
+                    _currentFrame.FirstThrow = MaxPoints;
                     break;
                 default:
                     CalculateCommonNumberPins(numberPins);
