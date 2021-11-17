@@ -33,7 +33,7 @@ namespace BowlingScore.Tests
             Assert.AreEqual(1, _score.Frames.Count);
         }
 
-        [TestCase]
+        [Test]
         public void Calculation_Seven_Points_Returns_Seven_Points_In_Frame()
         {
             var throws = new [] {"7"};
@@ -42,7 +42,7 @@ namespace BowlingScore.Tests
             Assert.AreEqual(7, _score.Frames[0].Total);
         }
         
-        [TestCase]
+        [Test]
         public void Calculation_Two_Throws_Returns_Sum_of_Pins_Knocked_Down_In_Frame()
         {
             var throws = new [] {"7", "2"};

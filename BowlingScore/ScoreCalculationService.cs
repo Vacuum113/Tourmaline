@@ -20,15 +20,25 @@ namespace BowlingScore
             if (_isFirstThrow)
                 _score.Frames.Add(_currentFrame);
 
+            if (_isFirstThrow)
+                CalculateFirstThrow(numberPins);
+
+        private void CalculateFirstThrow(string numberPins)
+        {
             switch (numberPins)
             {
                 default:
-                    var num = int.Parse(numberPins);
-                    _currentFrame.FirstThrow = num;
+                    CalculateCommonNumberPins(numberPins);
                     break;
             }
+        }
 
-            _isFirstThrow = !_isFirstThrow;
+        private void CalculateCommonNumberPins(string numberPins)
+        {
+            var num = int.Parse(numberPins);
+            
+            if (_isFirstThrow)
+                _currentFrame.FirstThrow = num;
         }
 
         private enum ThrowResultType
