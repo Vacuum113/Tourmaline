@@ -28,7 +28,10 @@ namespace BowlingScore
                 CalculateFirstThrow(numberPins);
             }
             else
+            {
                 CalculateSecondThrow(numberPins);
+                _currentFrame = new Frame();
+            }
 
             if (_currentFrame.FirstThrow != MaxPoints)
                 _isFirstThrow = !_isFirstThrow;
