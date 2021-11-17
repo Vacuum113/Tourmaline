@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BowlingScore", "BowlingScore\BowlingScore.csproj", "{24FB72FF-F52E-438F-A989-E5AC3DC5279A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24FB72FF-F52E-438F-A989-E5AC3DC5279A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24FB72FF-F52E-438F-A989-E5AC3DC5279A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24FB72FF-F52E-438F-A989-E5AC3DC5279A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24FB72FF-F52E-438F-A989-E5AC3DC5279A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
