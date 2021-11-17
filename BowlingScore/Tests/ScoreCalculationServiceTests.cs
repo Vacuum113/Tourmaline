@@ -33,6 +33,15 @@ namespace BowlingScore.Tests
             Assert.AreEqual(1, _score.Frames.Count);
         }
 
+        [TestCase]
+        public void Calculation_Seven_Points_Returns_Seven_Points_In_A_Frame()
+        {
+            var throws = new [] {"7"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(7, _score.Frames[0].FirstThrow);
+        }
+
         private void CalculationManyThrows(string[] throws)
         {
             foreach (var thr in throws)
