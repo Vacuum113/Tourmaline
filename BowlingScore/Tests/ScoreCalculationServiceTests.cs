@@ -86,6 +86,15 @@ namespace BowlingScore.Tests
 
             Assert.AreEqual(11, _score.Total);
         }
+        
+        [Test]
+        public void Points_For_Next_Two_Throws_After_Strike_Doubled()
+        {
+            var throws = new [] {"X", "2", "5"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(17, _score.Frames[0].Total);
+        }
 
         private void CalculationManyThrows(string[] throws)
         {
