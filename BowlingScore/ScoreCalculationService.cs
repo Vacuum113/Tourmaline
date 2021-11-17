@@ -62,10 +62,10 @@ namespace BowlingScore
 
             _currentFrame.Throws.Add(points);
             
-            RecalculatePreviousFrame(points);
+            RecalculatePreviousFrames(points);
         }
 
-        private void RecalculatePreviousFrame(int points)
+        private void RecalculatePreviousFrames(int points)
         {
             var isPreviousFrameHasStrike = _score.Frames.Count > 1 && _score.Frames[^2].Strike;
             var isPreviousFrameHasSpare = _score.Frames.Count > 1 && _score.Frames[^2].Spare;
