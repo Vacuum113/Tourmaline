@@ -39,7 +39,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"7"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(7, _score.Frames[0].FirstThrow);
+            Assert.AreEqual(7, _score.Frames[0].Total);
         }
 
         private void CalculationManyThrows(string[] throws)
