@@ -18,5 +18,16 @@ namespace BowlingScore.Tests
 
             Assert.AreEqual(1, scoreCalculationService.Score.Frames.Count);
         }
+        
+        [Test]
+        public void Calculation_Two_Throw_Returns_One_Frame()
+        {
+            var scoreCalculationService = new ScoreCalculationService();
+
+            scoreCalculationService.CalculateThrow("9");
+            scoreCalculationService.CalculateThrow("2");
+
+            Assert.AreEqual(1, scoreCalculationService.Score.Frames.Count);
+        }
     }
 }
