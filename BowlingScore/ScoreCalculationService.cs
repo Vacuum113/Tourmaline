@@ -7,6 +7,9 @@ namespace BowlingScore
         private readonly Score _score;
         private Frame _currentFrame;
         private bool _isFirstThrow;
+
+        private const string Strike = "X";
+        private const string Spare = "/";
         
         public ScoreCalculationService(Score score)
         {
@@ -22,11 +25,29 @@ namespace BowlingScore
 
             if (_isFirstThrow)
                 CalculateFirstThrow(numberPins);
+            else
+                CalculateSecondThrow(numberPins);
+
+            _isFirstThrow = !_isFirstThrow;
+        }
+
+        private void CalculateSecondThrow(string numberPins)
+        {
+            if (numberPins == Spare)
+            {
+                    
+            }
+            else
+                CalculateCommonNumberPins(numberPins);
+        }
 
         private void CalculateFirstThrow(string numberPins)
         {
             switch (numberPins)
             {
+                case Strike:
+                    
+                    break;
                 default:
                     CalculateCommonNumberPins(numberPins);
                     break;
@@ -39,6 +60,8 @@ namespace BowlingScore
             
             if (_isFirstThrow)
                 _currentFrame.FirstThrow = num;
+            else
+                _currentFrame.SecondThrow = num;
         }
 
         private enum ThrowResultType
