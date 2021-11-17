@@ -15,10 +15,18 @@ namespace BowlingScore
             _isFirstThrow = true;
         }
         
-        public void CalculateThrow(string s)
+        public void CalculateThrow(string numberPins)
         {
             if (_isFirstThrow)
                 _score.Frames.Add(_currentFrame);
+
+            switch (numberPins)
+            {
+                default:
+                    var num = int.Parse(numberPins);
+                    _currentFrame.FirstThrow = num;
+                    break;
+            }
 
             _isFirstThrow = !_isFirstThrow;
         }
