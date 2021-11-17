@@ -24,10 +24,10 @@ namespace BowlingScore
         public void CalculateThrow(string numberPins)
         {
             if (_isFirstThrow)
+            {
                 _score.Frames.Add(_currentFrame);
-
-            if (_isFirstThrow)
                 CalculateFirstThrow(numberPins);
+            }
             else
                 CalculateSecondThrow(numberPins);
 
