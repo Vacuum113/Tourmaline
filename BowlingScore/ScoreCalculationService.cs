@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BowlingScore
@@ -8,6 +9,10 @@ namespace BowlingScore
         private readonly Score _score;
         private Frame _currentFrame;
         private bool _isFirstThrow;
+
+        private List<int> _frames = new List<int>();
+        private List<int> _throws = new List<int>();
+        private int currentThrow = 0;
         
         private bool IsLastFrame => _score.Frames.Count == 10;
         
@@ -26,14 +31,68 @@ namespace BowlingScore
         
         public void CalculateThrow(string numberPins)
         {
-            if (_isFirstThrow && !IsLastFrame)
-                _score.Frames.Add(_currentFrame);
-            
-            InternalCalculateThrow(numberPins);
+            var points = numberPins switch
+            {
+                Strike => MaxPoints,
+                Spare => MaxPoints - _throws[^1],
+                _ => CalculateCommonNumberPins(numberPins)
+            };
 
-            UpdateStateAfterCalculation();
+            _throws.Add(points);
+        }
 
-            UpdateStateOnStrike();
+        public Score Score()
+        {
+            var score = new Score();
+
+            var isFirstThrow = true;
+            var frameCount = 0;
+            for (int i = 0; i < _throws.Count; i++)
+            {
+                Frame frame;
+                switch (_throws[i])
+                {
+                    case 10:
+                        frame = score.Frames.Count == 10 ? score.Frames[^1] : new Frame();
+                        
+                        if (i + 1 < _throws.Count && score.Frames.Count < 9)
+                            frame.SetAdditionalPoints(_throws[i + 1]);
+                        
+                        if (i + 2 < _throws.Count && score.Frames.Count < 9)
+                            frame.SetAdditionalPoints(_throws[i + 2]);
+
+                        frame.Throws.Add(_throws[i]);
+                        if (score.Frames.Count != 10)
+                        {
+                            score.Frames.Add(frame);
+                            frameCount++;
+                        }
+
+                        isFirstThrow = !_isFirstThrow;
+                        break;
+                    default:
+                        if (score.Frames.Count == 10)
+                            isFirstThrow = false;
+                        
+                        frame = !isFirstThrow ? score.Frames[^1] : new Frame();
+                        
+                        frame.Throws.Add(_throws[i]);
+                        if (isFirstThrow)
+                        {
+                            if (i + 2 < _throws.Count && _throws[i] + _throws[i + 1] == 10 && score.Frames.Count != 10)
+                            {
+                                frame.SetAdditionalPoints(_throws[i + 2]);
+                            }
+                            frameCount++;
+                            score.Frames.Add(frame);
+                        }
+                        break;
+                }
+
+                isFirstThrow = !isFirstThrow;
+            }
+
+            return score;
         }
 
         private void UpdateStateOnStrike()
