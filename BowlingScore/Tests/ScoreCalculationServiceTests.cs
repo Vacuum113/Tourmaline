@@ -5,14 +5,12 @@ namespace BowlingScore.Tests
     [TestFixture]
     public class ScoreCalculationTests
     {
-        private Score _score;
         private ScoreCalculationService _scoreCalculationService;
         
         [SetUp]
         public void Setup()
         {
-            _score = new Score();
-            _scoreCalculationService = new ScoreCalculationService(_score);
+            _scoreCalculationService = new ScoreCalculationService();
         }
 
         [Test]
