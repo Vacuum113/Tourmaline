@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace BowlingScore.Tests
@@ -19,16 +21,16 @@ namespace BowlingScore.Tests
             var throws = new [] {"9"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(1, _scoreCalculationService.Score().Frames.Count);
+            Assert.AreEqual(1, _scoreCalculationService.GetCurrentScore().Frames.Count);
         }
         
         [Test]
         public void Calculation_Two_Throw_Returns_One_Frame()
         {
-            var throws = new [] {"9", "2"};
+            var throws = new [] {"4", "5"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(1, _scoreCalculationService.Score().Frames.Count);
+            Assert.AreEqual(1, _scoreCalculationService.GetCurrentScore().Frames.Count);
         }
 
         [Test]
@@ -37,7 +39,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"7"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(7, _scoreCalculationService.Score().Frames[0].Total);
+            Assert.AreEqual(7, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
         }
         
         [Test]
@@ -46,7 +48,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"7", "2"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(9, _scoreCalculationService.Score().Frames[0].Total);
+            Assert.AreEqual(9, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
         }
         
         [Test]
@@ -55,7 +57,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"X"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(10, _scoreCalculationService.Score().Frames[0].Total);
+            Assert.AreEqual(10, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
         }
         
         [Test]
@@ -64,7 +66,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"X", "X", "X"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(60, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(60, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         [Test]
@@ -73,7 +75,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"X", "2"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(2, _scoreCalculationService.Score().Frames.Count);
+            Assert.AreEqual(2, _scoreCalculationService.GetCurrentScore().Frames.Count);
         }
         
         [Test]
@@ -82,7 +84,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"7", "/"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(10, _scoreCalculationService.Score().Frames[0].Total);
+            Assert.AreEqual(10, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
         }
         
         [Test]
@@ -91,7 +93,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"5", "2", "2", "2"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(11, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(11, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         [Test]
@@ -100,8 +102,8 @@ namespace BowlingScore.Tests
             var throws = new [] {"X", "2", "5"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(17, _scoreCalculationService.Score().Frames[0].Total);
-            Assert.AreEqual(24, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(17, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
+            Assert.AreEqual(24, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         [Test]
@@ -110,8 +112,8 @@ namespace BowlingScore.Tests
             var throws = new [] {"5", "/", "5", "2"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(15, _scoreCalculationService.Score().Frames[0].Total);
-            Assert.AreEqual(22, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(15, _scoreCalculationService.GetCurrentScore().Frames[0].Total);
+            Assert.AreEqual(22, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         [Test]
@@ -120,7 +122,7 @@ namespace BowlingScore.Tests
             var throws = new [] {"X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(300, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(300, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         [Test]

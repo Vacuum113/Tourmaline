@@ -5,7 +5,12 @@ namespace BowlingScore
 {
     public class Score
     {
-        public List<Frame> Frames { get; } = new ();
+        public Score(List<Frame> frames)
+        {
+            Frames = frames;
+        }
+
+        public List<Frame> Frames { get; }
         public int Total => Frames.Sum(f => f.Total);
     }
 }
