@@ -129,7 +129,65 @@ namespace BowlingScore.Tests
             var throws = new [] {"X", "7", "/", "7", "2", "9", "/", "X", "X", "X", "2", "3", "6", "/", "7", "/", "3"};
             CalculationManyThrows(throws);
 
-            Assert.AreEqual(168, _scoreCalculationService.Score().Total);
+            Assert.AreEqual(168, _scoreCalculationService.GetCurrentScore().Total);
+        }
+        
+        [Test]
+        public void Invalid_Input_Must_Throw_Exception()
+        {
+            var throws = new [] {"2", "g", "/"};
+            Assert.Catch<Exception>(() => CalculationManyThrows(throws));
+        }
+        
+                
+        [Test]
+        public void Total_Of_Throws_In_Frame_Must_Be_Less_Than_11()
+        {
+            var throws = new [] {"9", "9"};
+            Assert.Catch<Exception>(() => CalculationManyThrows(throws));
+        }
+
+        [Test] 
+        public void Spare_In_All_Frames_Expect_Last_Throw_Must_Be_Processed_Correctly()
+        {
+            var throws = new [] {"5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "5", "/", "X"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(155, _scoreCalculationService.GetCurrentScore().Total);
+        }
+        
+        [Test] 
+        public void Only_First_Throw_Successful()
+        {
+            var throws = new [] {"5", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(5, _scoreCalculationService.GetCurrentScore().Total);
+        }
+        
+        [Test] 
+        public void Third_Throw_In_Last_Frame_Not_Allowed_If_There_No_Strike_Or_Spare_In_Last_Frame()
+        {
+            var throws = new [] {"5", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2"};
+            Assert.Catch<Exception>(() => CalculationManyThrows(throws));
+        }
+        
+        [Test] 
+        public void Should_Can_Get_Total_For_Any_Frame()
+        {
+            var throws = new [] {"X", "7", "/", "7"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(20, _scoreCalculationService.GetCurrentScore().Frames.First().Total);
+        }
+        
+        [Test] 
+        public void Should_Can_Get_Total_For_All_Frames_In_Any_Moment()
+        {
+            var throws = new [] {"X", "7", "/", "7"};
+            CalculationManyThrows(throws);
+
+            Assert.AreEqual(44, _scoreCalculationService.GetCurrentScore().Total);
         }
         
         private void CalculationManyThrows(string[] throws)
