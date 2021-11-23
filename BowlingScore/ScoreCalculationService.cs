@@ -38,72 +38,58 @@ namespace BowlingScore
         }
         
         public Score GetCurrentScore() => new(_frames);
+        
+        
 
         private void ParseCurrentPoints(string numberPins)
         {
             if (!CheckForLegalThrowInput(numberPins))
                 throw new Exception($"Input is invalid, input: {numberPins}");
-            
-            switch (numberPins)
+
+            _pointsInCurrentThrow = numberPins switch
             {
-                case Strike:
-                    _pointsInCurrentThrow = MaxPoints;
-                    break;
-                case Spare:
-                    _pointsInCurrentThrow = MaxPoints - _throws[^1].Value;
-                    break;
-                default:
-                    _pointsInCurrentThrow = int.Parse(numberPins);
-                    break;
-            }
+                Strike => MaxPoints,
+                Spare => MaxPoints - _throws[^1].Value,
+                _ => int.Parse(numberPins)
+            };
         }
 
         private void ProcessingFirstThrowInFrame()
         {
-            var frame = new Frame();
-            _frames.Add(frame);
-            _currentFrame = frame;
-            
-            var newThrow = new Throw(_pointsInCurrentThrow, frame);
-            _throws.Add(newThrow);
-            
-            frame.Throws.Add(newThrow);
+            _currentFrame = new Frame();
+            _frames.Add(_currentFrame);
 
+            AddNewThrowInScore();
+            
             if (_throws.Count > 1)
             {
                 var prevThrow = _throws[^2];
-                if (prevThrow.Frame.Spare)
-                    prevThrow.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
                 
-                if (prevThrow.Frame.Strike)
-                    prevThrow.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
+                CheckSpare(prevThrow);
+                CheckStrike(prevThrow);
             }
 
             if (_throws.Count > 2)
             {
                 var prevPrevThrow = _throws[^3];
-                if (prevPrevThrow.Frame.Strike)
-                    prevPrevThrow.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
+                CheckStrike(prevPrevThrow);
             }
 
-            if (!(_currentFrame.Strike || _currentFrame.Strike) || _frames.Count == 10)
+            if (!_currentFrame.Strike || _frames.Count == 10)
                 _frameState = FrameState.SecondThrow;
         }
         
         private void ProcessingSecondThrowInFrame()
         {
-            var newThrow = new Throw(_pointsInCurrentThrow, _currentFrame);
-            _currentFrame.Throws.Add(newThrow);
-            _throws.Add(newThrow);
+            AddNewThrowInScore();
 
-            if (_currentFrame.Total > 10 && (_frames.Count != 10 || _currentFrame.Throws.First().Value != MaxPoints))
+            if (_currentFrame.Total > 10 && _frames.Count != 10 && !_currentFrame.Strike)
                 throw new Exception("Two throws cannot be more than 10");
                 
             if (_throws.Count > 2)
             {
-                var prevThrow = _throws[^3];
-                if (prevThrow.Frame.Strike)
-                    prevThrow.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
+                var prevPrevThrow = _throws[^3];
+                CheckStrike(prevPrevThrow);
             }
             
             _frameState = _frames.Count < 10 ? FrameState.FirstThrow : FrameState.ThirdThrow;
@@ -111,15 +97,34 @@ namespace BowlingScore
 
         private void ProcessingThirdThrowInFrame()
         {
-            if (_throws[^1].Value + _throws[^2].Value != MaxPoints && _throws[^2].Value != MaxPoints)
+            if (!_currentFrame.Strike && !_currentFrame.Spare)
                 throw new Exception("The third throw is allowed only if you have a strike or spare in the last frame.");
+
+            AddNewThrowInScore();
+        }
+        
+        private void AddNewThrowInScore()
+        {
+            var newThrow = new Throw(_pointsInCurrentThrow, _currentFrame);
             
-            _currentFrame.Throws.Add(new Throw(_pointsInCurrentThrow, _currentFrame));
+            _throws.Add(newThrow);
+            _currentFrame.Throws.Add(newThrow);
+        }
+
+        private void CheckStrike(Throw @throw)
+        {
+            if (@throw.Frame.Strike)
+                @throw.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
+        }
+        
+        private void CheckSpare(Throw @throw)
+        {
+            if (@throw.Frame.Spare)
+                @throw.Frame.SetAdditionalPoints(_pointsInCurrentThrow);
         }
 
         private static bool CheckForLegalThrowInput(string input) =>
             Regex.IsMatch(input, @"^([0-9]|X|/)$");
-        
     }
 
     public enum FrameState
